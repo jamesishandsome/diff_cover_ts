@@ -1,8 +1,8 @@
-import { describe, expect, test, jest, beforeEach } from "bun:test";
+import { describe, expect, test, vi, beforeEach } from "bun:test";
 import { execute, runCommandForCode, CommandError } from "../src/command_runner";
 
-const mockSpawnSync = jest.fn();
-(jest as any).mock("child_process", () => ({
+const mockSpawnSync = vi.fn();
+vi.mock("child_process", () => ({
   spawnSync: mockSpawnSync,
 }));
 

@@ -1,12 +1,12 @@
-import { describe, expect, test, jest, beforeEach } from "bun:test";
+import { describe, expect, test, vi, beforeEach } from "bun:test";
 import * as path from "path";
 import { findCoverageReports } from "../src/auto_config";
 
 // Mock fs
-const mockExistsSync = jest.fn();
-const mockReadFileSync = jest.fn();
+const mockExistsSync = vi.fn();
+const mockReadFileSync = vi.fn();
 
-(jest as any).mock("fs", () => ({
+vi.mock("fs", () => ({
   default: {
     existsSync: mockExistsSync,
     readFileSync: mockReadFileSync,
