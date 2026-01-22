@@ -3,12 +3,7 @@ import * as path from "path";
 
 export function findCoverageReports(): string[] {
   const cwd = process.cwd();
-  const configFiles = [
-    "vitest.config.ts",
-    "vitest.config.js",
-    "vite.config.ts",
-    "vite.config.js",
-  ];
+  const configFiles = ["vitest.config.ts", "vitest.config.js", "vite.config.ts", "vite.config.js"];
 
   let reporters: string[] = [];
   let reportsDirectory = "coverage";
@@ -18,7 +13,7 @@ export function findCoverageReports(): string[] {
     if (fs.existsSync(configPath)) {
       try {
         const content = fs.readFileSync(configPath, "utf-8");
-        
+
         // Extract reporters
         // Match: reporter: ['lcov', 'json'] or reporter: "lcov"
         const reporterMatch = content.match(/reporter:\s*(\[[^\]]*\]|['"][^'"]*['"])/);
@@ -29,8 +24,8 @@ export function findCoverageReports(): string[] {
             const items = reporterValue
               .slice(1, -1) // remove []
               .split(",")
-              .map(s => s.trim().replace(/^['"]|['"]$/g, ""));
-            reporters = items.filter(s => s.length > 0);
+              .map((s) => s.trim().replace(/^['"]|['"]$/g, ""));
+            reporters = items.filter((s) => s.length > 0);
           } else {
             reporters = [reporterValue.replace(/^['"]|['"]$/g, "")];
           }
@@ -51,12 +46,12 @@ export function findCoverageReports(): string[] {
     }
   }
 
-  // If no reporters found in config, but coverage directory exists, 
+  // If no reporters found in config, but coverage directory exists,
   // we might try to guess? But user asked to identify FROM config.
   // If no config found, we return empty list.
 
   const foundReports: string[] = [];
-  
+
   if (reporters.length > 0) {
     // Map reporters to expected files
     // lcov -> lcov.info
@@ -64,9 +59,9 @@ export function findCoverageReports(): string[] {
     // json -> coverage-final.json (istanbul)
     // clover -> clover.xml
     // jacoco -> jacoco.xml
-    
+
     // Priorities: lcov > xml > json
-    
+
     for (const reporter of reporters) {
       let filename = "";
       if (reporter === "lcov") filename = "lcov.info";

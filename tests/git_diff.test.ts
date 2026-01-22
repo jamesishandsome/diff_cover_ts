@@ -45,7 +45,7 @@ describe("GitDiffTool", () => {
     const output = tool.diffCommitted("master");
     expect(output).toBe("diff output");
     expect(mockExecute).toHaveBeenCalledWith(
-      expect.arrayContaining(["git", "diff", "master...HEAD"])
+      expect.arrayContaining(["git", "diff", "master...HEAD"]),
     );
   });
 
@@ -56,7 +56,7 @@ describe("GitDiffTool", () => {
       throw new CommandError("unknown revision");
     });
     expect(() => tool.diffCommitted("bad-branch")).toThrow(
-      /Could not find the branch to compare to/
+      /Could not find the branch to compare to/,
     );
   });
 
@@ -92,7 +92,7 @@ describe("GitDiffTool", () => {
     const files = tool.untracked();
     expect(files).toEqual(["file1.ts", "file2.ts"]);
     expect(mockExecute).toHaveBeenCalledWith(
-      expect.arrayContaining(["git", "ls-files", "--exclude-standard", "--others"])
+      expect.arrayContaining(["git", "ls-files", "--exclude-standard", "--others"]),
     );
   });
 
@@ -103,11 +103,11 @@ describe("GitDiffTool", () => {
     tool.untracked();
     expect(mockExecute).toHaveBeenCalledTimes(1);
   });
-  
+
   test("untracked should handle empty output", () => {
-      const tool = new GitDiffTool("...", false);
-      mockExecute.mockReturnValue([""]);
-      expect(tool.untracked()).toEqual([]);
+    const tool = new GitDiffTool("...", false);
+    mockExecute.mockReturnValue([""]);
+    expect(tool.untracked()).toEqual([]);
   });
 });
 
@@ -148,9 +148,9 @@ describe("GitDiffFileTool", () => {
 });
 
 describe("GitDiffError", () => {
-    test("should have correct name", () => {
-        const error = new GitDiffError("msg");
-        expect(error.name).toBe("GitDiffError");
-        expect(error.message).toBe("msg");
-    });
+  test("should have correct name", () => {
+    const error = new GitDiffError("msg");
+    expect(error.name).toBe("GitDiffError");
+    expect(error.message).toBe("msg");
+  });
 });

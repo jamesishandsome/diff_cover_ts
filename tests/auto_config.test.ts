@@ -152,7 +152,7 @@ describe("auto_config", () => {
 
   test("should return empty list if config found but no reporter", () => {
     const configPath = path.join(cwd, "vitest.config.ts");
-    
+
     mockExistsSync.mockImplementation((p: string) => {
       if (p === configPath) return true;
       return false;

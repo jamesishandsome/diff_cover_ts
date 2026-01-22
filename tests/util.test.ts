@@ -30,9 +30,9 @@ describe("util", () => {
   it("toUnescapedFilename should unescape common escapes", () => {
     expect(toUnescapedFilename('"\\n\\t"')).toBe("\n\t");
   });
-  
+
   it("toUnescapedFilename should handle octal escapes (not implemented but should pass through or similar)", () => {
-      // Current implementation is simple char map
-      expect(toUnescapedFilename('"\\a"')).toBe("a");
+    // Current implementation is simple char map
+    expect(toUnescapedFilename('"\\a"')).toBe("a");
   });
 });

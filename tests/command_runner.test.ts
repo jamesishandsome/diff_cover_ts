@@ -86,15 +86,15 @@ describe("command_runner", () => {
     });
 
     test("should return 1 on ENOENT", () => {
-        const err = new Error("ENOENT");
-        (err as any).code = "ENOENT";
-        mockSpawnSync.mockReturnValue({
-          error: err,
-        });
-  
-        const code = runCommandForCode(["missing"]);
-        expect(code).toBe(1);
+      const err = new Error("ENOENT");
+      (err as any).code = "ENOENT";
+      mockSpawnSync.mockReturnValue({
+        error: err,
       });
+
+      const code = runCommandForCode(["missing"]);
+      expect(code).toBe(1);
+    });
 
     test("should return 1 if command is empty", () => {
       const code = runCommandForCode([]);
