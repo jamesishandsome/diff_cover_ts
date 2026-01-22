@@ -1,5 +1,31 @@
-templates/
-coverage.xml
-*.txt
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+out/
+
+# Coverage
+coverage/
+*.xml
+*.lcov
 lcov.info
 subdir_coverage.xml
+
+# Templates
+templates/
+
+# Reports and logs
+*.txt
+*.log
+
+# Lock files
+bun.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Editor config
+.idea/
+.vscode/
+.DS_Store

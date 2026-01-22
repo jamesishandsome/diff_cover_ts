@@ -9,7 +9,7 @@
 
 **A high-performance TypeScript port of the [diff_cover](https://github.com/Bachmann1234/diff_cover) tool.**
 
-*Automatically find lines of code in your git diff that are missing test coverage or quality checks.*
+_Automatically find lines of code in your git diff that are missing test coverage or quality checks._
 
 [English](./README.md) | [简体中文](./README_zh.md)
 
@@ -85,19 +85,19 @@ diff-cover coverage/cobertura.xml
 
 #### ⚙️ Options
 
-| Option | Description | Default |
-| :--- | :--- | :--- |
-| `--compare-branch <branch>` | Branch to compare against | `origin/main` |
-| `--fail-under <score>` | Returns a non-zero exit code if coverage is below this value | `0` |
-| `--show-uncovered` | Print uncovered lines to the console | `false` |
-| `--expand-coverage-report` | Append missing lines based on previous line hits | `false` |
-| `--ignore-staged` | Ignore staged changes in the diff | `false` |
-| `--ignore-unstaged` | Ignore unstaged changes in the diff | `false` |
-| `--include-untracked` | Include untracked files in the analysis | `false` |
-| `--exclude <patterns...>` | Exclude files matching glob patterns | `[]` |
-| `--include <patterns...>` | Include files matching glob patterns | `[]` |
-| `--html-report <file>` | Generate an HTML report at the specified path | `null` |
-| `--json-report <file>` | Generate a JSON report at the specified path | `null` |
+| Option                      | Description                                                  | Default       |
+| :-------------------------- | :----------------------------------------------------------- | :------------ |
+| `--compare-branch <branch>` | Branch to compare against                                    | `origin/main` |
+| `--fail-under <score>`      | Returns a non-zero exit code if coverage is below this value | `0`           |
+| `--show-uncovered`          | Print uncovered lines to the console                         | `false`       |
+| `--expand-coverage-report`  | Append missing lines based on previous line hits             | `false`       |
+| `--ignore-staged`           | Ignore staged changes in the diff                            | `false`       |
+| `--ignore-unstaged`         | Ignore unstaged changes in the diff                          | `false`       |
+| `--include-untracked`       | Include untracked files in the analysis                      | `false`       |
+| `--exclude <patterns...>`   | Exclude files matching glob patterns                         | `[]`          |
+| `--include <patterns...>`   | Include files matching glob patterns                         | `[]`          |
+| `--html-report <file>`      | Generate an HTML report at the specified path                | `null`        |
+| `--json-report <file>`      | Generate a JSON report at the specified path                 | `null`        |
 
 ---
 
@@ -121,13 +121,13 @@ diff-quality report.txt --violations <driver>
 
 #### ⚙️ Options
 
-| Option | Description | Default |
-| :--- | :--- | :--- |
-| `--compare-branch <branch>` | Branch to compare against | `origin/main` |
-| `--fail-under <score>` | Returns a non-zero exit code if quality score is below value | `0` |
-| `--include-untracked` | Include untracked files | `false` |
-| `--exclude <patterns...>` | Exclude files matching glob patterns | `[]` |
-| `--html-report <file>` | Generate an HTML report at the specified path | `null` |
+| Option                      | Description                                                  | Default       |
+| :-------------------------- | :----------------------------------------------------------- | :------------ |
+| `--compare-branch <branch>` | Branch to compare against                                    | `origin/main` |
+| `--fail-under <score>`      | Returns a non-zero exit code if quality score is below value | `0`           |
+| `--include-untracked`       | Include untracked files                                      | `false`       |
+| `--exclude <patterns...>`   | Exclude files matching glob patterns                         | `[]`          |
+| `--html-report <file>`      | Generate an HTML report at the specified path                | `null`        |
 
 ## 💻 Development
 
