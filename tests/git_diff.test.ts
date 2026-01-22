@@ -1,17 +1,17 @@
-import { describe, expect, test, vi, beforeEach } from "bun:test";
+import { describe, expect, test, vi, beforeEach, jest } from "bun:test";
 import { GitDiffTool, GitDiffFileTool, GitDiffError } from "../src/git_diff";
 import * as commandRunner from "../src/command_runner";
 
 // Mock command_runner
 const mockExecute = vi.fn();
-vi.mock("../src/command_runner", () => ({
+(jest as any).mock("../src/command_runner", () => ({
   execute: mockExecute,
   CommandError: class CommandError extends Error {},
 }));
 
 // Mock fs
 const mockReadFileSync = vi.fn();
-vi.mock("fs", () => ({
+(jest as any).mock("fs", () => ({
   default: {
     readFileSync: mockReadFileSync,
   },

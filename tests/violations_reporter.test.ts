@@ -1,4 +1,4 @@
-import { describe, expect, test, vi, beforeEach } from "bun:test";
+import { describe, expect, test, jest, beforeEach } from "bun:test";
 import {
   QualityReporter,
   EslintDriver,
@@ -13,14 +13,14 @@ import {
 } from "../src/violations_reporter";
 import * as commandRunner from "../src/command_runner";
 
-vi.mock("../src/command_runner", () => ({
-  execute: vi.fn(),
-  runCommandForCode: vi.fn(),
+(jest as any).mock("../src/command_runner", () => ({
+  execute: jest.fn(),
+  runCommandForCode: jest.fn(),
 }));
 
-const mockExistsSync = vi.fn();
-const mockReadFileSync = vi.fn();
-vi.mock("fs", () => ({
+const mockExistsSync = jest.fn();
+const mockReadFileSync = jest.fn();
+(jest as any).mock("fs", () => ({
   default: {
     existsSync: mockExistsSync,
     readFileSync: mockReadFileSync,
@@ -29,7 +29,7 @@ vi.mock("fs", () => ({
   readFileSync: mockReadFileSync,
 }));
 
-vi.mock("../src/git_path", () => ({
+(jest as any).mock("../src/git_path", () => ({
   GitPathTool: {
     relativePath: (p: string) => p,
     absolutePath: (p: string) => p,
@@ -37,13 +37,13 @@ vi.mock("../src/git_path", () => ({
 }));
 
 describe("QualityReporter", () => {
-  let mockExecute: vi.Mock;
-  let mockRunCommandForCode: vi.Mock;
+  let mockExecute: jest.Mock;
+  let mockRunCommandForCode: jest.Mock;
   // mockExistsSync is global to module scope now
 
   beforeEach(() => {
-    mockExecute = commandRunner.execute as vi.Mock;
-    mockRunCommandForCode = commandRunner.runCommandForCode as vi.Mock;
+    mockExecute = commandRunner.execute as jest.Mock;
+    mockRunCommandForCode = commandRunner.runCommandForCode as jest.Mock;
 
     mockExecute.mockClear();
     mockRunCommandForCode.mockClear();
@@ -121,7 +121,7 @@ describe("QualityReporter", () => {
 
   test("should throw if driver not installed", () => {
     const driver = new MockDriver();
-    vi.spyOn(driver, "installed").mockReturnValue(false);
+    jest.spyOn(driver, "installed").mockReturnValue(false);
     const reporter = new QualityReporter(driver);
 
     mockExistsSync.mockReturnValue(true);
