@@ -1,14 +1,16 @@
-import { describe, it, expect, vi, beforeEach, jest } from "bun:test";
+import { describe, it, expect, beforeEach, jest } from "bun:test";
 import { GitPathTool } from "../src/git_path";
 import { toUnixPath } from "../src/util";
+import { execute } from "../src/command_runner";
 
 // Mock command_runner
-const mockExecute = vi.fn();
 (jest as any).mock("../src/command_runner", () => ({
-  execute: mockExecute,
+  execute: jest.fn(),
 }));
 
 describe("GitPathTool", () => {
+  const mockExecute = execute as jest.Mock;
+
   beforeEach(() => {
     mockExecute.mockClear();
   });
@@ -38,7 +40,7 @@ describe("GitPathTool", () => {
     // relativePath takes a path relative to git root, and returns path relative to cwd
     const rel = GitPathTool.relativePath("subdir/file.ts");
     // relative from /git/root/subdir to /git/root/subdir/file.ts is file.ts
-    expect(rel).toBe("file.ts");
+    expect(toUnixPath(rel)).toBe("file.ts");
   });
 
   it("should calculate relative path for file in root", () => {
