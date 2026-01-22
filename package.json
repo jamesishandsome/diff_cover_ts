@@ -9,12 +9,25 @@
     "quality",
     "testing"
   ],
+  "homepage": "https://github.com/jamesishandsome/diff_cover_ts#readme",
+  "bugs": {
+    "url": "https://github.com/jamesishandsome/diff_cover_ts/issues"
+  },
+  "license": "MIT",
+  "author": "James Hu <jamesishandsome@github.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesishandsome/diff_cover_ts.git"
+  },
   "bin": {
     "diff-cover": "./dist/diff-cover.js",
     "diff-quality": "./dist/diff-quality.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md",
+    "README_zh.md"
   ],
   "type": "module",
   "module": "index.ts",
