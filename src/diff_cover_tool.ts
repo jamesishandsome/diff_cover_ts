@@ -10,6 +10,7 @@ import {
   StringReportGenerator,
 } from "./report_generator";
 import { getConfig, Tool } from "./config_parser";
+import { findCoverageReports } from "./auto_config";
 
 const VERSION = "0.1.0";
 
@@ -36,7 +37,7 @@ async function main() {
     .version(VERSION);
 
   program
-    .argument("<coverage_files...>", "coverage report files (XML or lcov.info)")
+    .argument("[coverage_files...]", "coverage report files (XML or lcov.info)")
     .option("--format <value>", "Format to use", formatType)
     .option("--show-uncovered", "Show uncovered lines on the console")
     .option(
@@ -106,11 +107,18 @@ async function main() {
     diffTool = new GitDiffTool(config.diffRangeNotation, config.ignoreWhitespace);
   }
 
-  const coverageFiles = program.args;
+  let coverageFiles = program.args;
 
   if (coverageFiles.length === 0) {
-    console.error("No coverage files provided");
-    process.exit(1);
+    // Try to auto-detect coverage reports from vite/vitest config
+    const autoDetected = findCoverageReports();
+    if (autoDetected.length > 0) {
+      console.log(`Auto-detected coverage reports: ${autoDetected.join(", ")}`);
+      coverageFiles = autoDetected;
+    } else {
+      console.error("No coverage files provided and none could be auto-detected from config.");
+      process.exit(1);
+    }
   }
 
   const xmlRoots: string[] = [];

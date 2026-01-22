@@ -19,11 +19,21 @@ import * as commandRunner from "../src/command_runner";
 }));
 
 const mockExistsSync = jest.fn();
+const mockReadFileSync = jest.fn();
 (jest as any).mock("fs", () => ({
   default: {
     existsSync: mockExistsSync,
+    readFileSync: mockReadFileSync,
   },
   existsSync: mockExistsSync,
+  readFileSync: mockReadFileSync,
+}));
+
+(jest as any).mock("../src/git_path", () => ({
+  GitPathTool: {
+    relativePath: (p: string) => p,
+    absolutePath: (p: string) => p,
+  },
 }));
 
 describe("QualityReporter", () => {
