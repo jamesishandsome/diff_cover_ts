@@ -1,9 +1,8 @@
-import { describe, expect, test, jest, beforeEach, afterEach } from "bun:test";
+import { describe, expect, test, jest, beforeEach } from "bun:test";
 import { execute, runCommandForCode, CommandError } from "../src/command_runner";
-import * as child_process from "child_process";
 
 const mockSpawnSync = jest.fn();
-jest.mock("child_process", () => ({
+(jest as any).mock("child_process", () => ({
   spawnSync: mockSpawnSync,
 }));
 

@@ -1,11 +1,10 @@
-import { describe, it, expect, beforeAll, jest, beforeEach } from "bun:test";
+import { describe, it, expect, jest, beforeEach } from "bun:test";
 import { GitPathTool } from "../src/git_path";
-import * as commandRunner from "../src/command_runner";
 import { toUnixPath } from "../src/util";
 
 // Mock command_runner
 const mockExecute = jest.fn();
-jest.mock("../src/command_runner", () => ({
+(jest as any).mock("../src/command_runner", () => ({
   execute: mockExecute,
 }));
 

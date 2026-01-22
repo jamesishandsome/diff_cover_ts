@@ -1,18 +1,17 @@
 import { describe, expect, test, jest, beforeEach } from "bun:test";
 import { GitDiffTool, GitDiffFileTool, GitDiffError } from "../src/git_diff";
 import * as commandRunner from "../src/command_runner";
-import * as fs from "fs";
 
 // Mock command_runner
 const mockExecute = jest.fn();
-jest.mock("../src/command_runner", () => ({
+(jest as any).mock("../src/command_runner", () => ({
   execute: mockExecute,
   CommandError: class CommandError extends Error {},
 }));
 
 // Mock fs
 const mockReadFileSync = jest.fn();
-jest.mock("fs", () => ({
+(jest as any).mock("fs", () => ({
   default: {
     readFileSync: mockReadFileSync,
   },
@@ -34,7 +33,7 @@ describe("GitDiffTool", () => {
     const tool = new GitDiffTool("...", true);
     mockExecute.mockReturnValue([""]);
     tool.diffCommitted();
-    const lastCall = mockExecute.mock.calls[0][0];
+    const lastCall = mockExecute.mock.calls[0]![0];
     expect(lastCall).toContain("--ignore-all-space");
     expect(lastCall).toContain("--ignore-blank-lines");
   });
@@ -73,7 +72,7 @@ describe("GitDiffTool", () => {
     mockExecute.mockReturnValue(["diff output"]);
     const output = tool.diffUnstaged();
     expect(output).toBe("diff output");
-    const lastCall = mockExecute.mock.calls[0][0];
+    const lastCall = mockExecute.mock.calls[0]![0];
     // Should NOT contain HEAD or range
     expect(lastCall.some((arg: string) => arg.includes("HEAD"))).toBe(false);
   });
