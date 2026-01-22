@@ -3,6 +3,9 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://img.shields.io/npm/v/diff-cover.svg)](https://www.npmjs.com/package/diff-cover)
+[![npm downloads](https://img.shields.io/npm/dm/diff-cover.svg)](https://www.npmjs.com/package/diff-cover)
+[![CI](https://github.com/jamesishandsome/diff_cover_ts/actions/workflows/ci.yml/badge.svg)](https://github.com/jamesishandsome/diff_cover_ts/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 [![Bun](https://img.shields.io/badge/Bun-1.0-orange.svg)](https://bun.sh/)
 [![Code Style](https://img.shields.io/badge/code%20style-oxlint-green)](https://github.com/oxc-project/oxc)
