@@ -1,5 +1,21 @@
 {
-  "name": "diff_cover_ts",
+  "name": "diff-cover",
+  "bin": {
+    "diff-cover": "./dist/diff-cover.js",
+    "diff-quality": "./dist/diff-quality.js"
+  },
+  "version": "1.1.0",
+  "description": "A Tool to Show Code Coverage for Modified Lines in a Diff",
+  "keywords": [
+    "diff",
+    "coverage",
+    "code",
+    "quality",
+    "testing"
+  ],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "module": "index.ts",
   "scripts": {
@@ -11,13 +27,6 @@
     "build:binary": "bun run scripts/build_release.ts",
     "build": "rolldown -c"
   },
-  "bin": {
-    "diff-cover": "./dist/diff-cover.js",
-    "diff-quality": "./dist/diff-quality.js"
-  },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "@iarna/toml": "^2.2.5",
     "@types/commander": "^2.12.5",
