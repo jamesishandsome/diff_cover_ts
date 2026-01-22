@@ -1,6 +1,6 @@
 {
   "name": "diff-cover",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "A Tool to Show Code Coverage for Modified Lines in a Diff",
   "keywords": [
     "code",
