@@ -1,0 +1,2 @@
+src/snippets.ts: line 10, col 5, Error - Test Violation
+src/snippets.ts: line 20, col 5, Error - Another Violation

@@ -1,0 +1,5 @@
+templates/
+coverage.xml
+*.txt
+lcov.info
+subdir_coverage.xml

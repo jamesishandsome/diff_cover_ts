@@ -1,0 +1,41 @@
+{
+  "name": "diff_cover_ts",
+  "type": "module",
+  "module": "index.ts",
+  "scripts": {
+    "test": "bun test",
+    "lint": "oxlint --type-aware --type-check",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "build": "bun run scripts/build_release.ts"
+  },
+  "bin": {
+    "diff-cover": "./src/diff_cover_tool.ts",
+    "diff-quality": "./src/diff_quality_tool.ts"
+  },
+  "dependencies": {
+    "@iarna/toml": "^2.2.5",
+    "@types/commander": "^2.12.5",
+    "@types/highlight.js": "^10.1.0",
+    "@types/iarna__toml": "^2.0.5",
+    "@types/minimatch": "^6.0.0",
+    "@types/nunjucks": "^3.2.6",
+    "@xmldom/xmldom": "^0.8.11",
+    "commander": "^14.0.2",
+    "highlight.js": "^11.11.1",
+    "jschardet": "^3.1.4",
+    "minimatch": "^10.1.1",
+    "nunjucks": "^3.2.4",
+    "xpath": "^0.0.34"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "oxfmt": "^0.26.0",
+    "oxlint": "^1.41.0",
+    "oxlint-tsgolint": "^0.11.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

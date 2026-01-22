@@ -1,0 +1,1 @@
+src/python_file.py:10: [C0111(missing-docstring), ] Missing docstring
