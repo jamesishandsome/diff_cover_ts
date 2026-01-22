@@ -8,12 +8,16 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
-    "build": "bun run scripts/build_release.ts"
+    "build:binary": "bun run scripts/build_release.ts",
+    "build": "rolldown -c"
   },
   "bin": {
-    "diff-cover": "./src/diff_cover_tool.ts",
-    "diff-quality": "./src/diff_quality_tool.ts"
+    "diff-cover": "./dist/diff-cover.js",
+    "diff-quality": "./dist/diff-quality.js"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@iarna/toml": "^2.2.5",
     "@types/commander": "^2.12.5",
@@ -33,7 +37,8 @@
     "@types/bun": "latest",
     "oxfmt": "^0.26.0",
     "oxlint": "^1.41.0",
-    "oxlint-tsgolint": "^0.11.1"
+    "oxlint-tsgolint": "^0.11.1",
+    "rolldown": "^1.0.0-rc.1"
   },
   "peerDependencies": {
     "typescript": "^5"
