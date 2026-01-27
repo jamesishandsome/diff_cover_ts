@@ -6,6 +6,7 @@ import { BaseViolationReporter, Violation } from "./violations_reporter";
 import { BaseDiffReporter } from "./diff_reporter";
 import { Snippet } from "./snippets";
 import { toUnixPath } from "./util";
+import { TEMPLATES } from "./generated_templates.ts";
 
 class DiffViolations {
   lines: Set<number>;
@@ -196,9 +197,20 @@ export abstract class BaseReportGenerator {
 }
 
 // Configure Nunjucks environment
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const TEMPLATE_LOADER = new nunjucks.FileSystemLoader(path.join(__dirname, "..", "templates"));
-const TEMPLATE_ENV = new nunjucks.Environment(TEMPLATE_LOADER, {
+const TEMPLATE_LOADER = {
+  getSource: (name: string) => {
+    if (Object.prototype.hasOwnProperty.call(TEMPLATES, name)) {
+      return {
+        src: TEMPLATES[name],
+        path: name,
+        noCache: true,
+      };
+    }
+    throw new Error(`Template not found: ${name}`);
+  },
+};
+
+const TEMPLATE_ENV = new nunjucks.Environment(TEMPLATE_LOADER as any, {
   autoescape: true,
   trimBlocks: true,
   lstripBlocks: true,

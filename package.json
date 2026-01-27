@@ -37,8 +37,8 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
-    "build:binary": "bun run scripts/build_release.ts",
-    "build": "rolldown -c",
+    "build:binary": "bun run scripts/generate_templates.ts && bun run scripts/build_release.ts",
+    "build": "bun run scripts/generate_templates.ts && rolldown -c",
     "prepare": "husky"
   },
   "dependencies": {
