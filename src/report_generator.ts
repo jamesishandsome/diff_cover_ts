@@ -1,6 +1,4 @@
 import { Writable } from "stream";
-import * as path from "path";
-import { fileURLToPath } from "url";
 import nunjucks from "nunjucks";
 import { BaseViolationReporter, Violation } from "./violations_reporter";
 import { BaseDiffReporter } from "./diff_reporter";
