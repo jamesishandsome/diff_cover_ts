@@ -5,10 +5,14 @@ node_modules
 out
 dist
 *.tgz
+docs/.vitepress/cache
+docs/.vitepress/dist
 
 # code coverage
 coverage
 *.lcov
+lcov.info
+coverage-final.json
 
 # logs
 logs

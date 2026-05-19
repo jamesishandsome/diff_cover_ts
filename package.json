@@ -39,6 +39,10 @@
     "format:check": "oxfmt --check .",
     "build:binary": "bun run scripts/generate_templates.ts && bun run scripts/build_release.ts",
     "build": "bun run scripts/generate_templates.ts && rolldown -c",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "prepublishOnly": "bun run build",
     "prepare": "husky"
   },
   "dependencies": {
@@ -63,7 +67,8 @@
     "oxfmt": "^0.26.0",
     "oxlint": "^1.41.0",
     "oxlint-tsgolint": "^0.11.1",
-    "rolldown": "^1.0.0-rc.1"
+    "rolldown": "^1.0.0-rc.1",
+    "vitepress": "^1.6.4"
   },
   "peerDependencies": {
     "typescript": "^5"

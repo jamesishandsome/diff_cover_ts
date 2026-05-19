@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { spawnSync } from "child_process";
 
 const TEMPLATES_DIR = path.join(process.cwd(), "templates");
 const OUTPUT_FILE = path.join(process.cwd(), "src", "generated_templates.ts");
@@ -26,6 +27,16 @@ export const TEMPLATES: Record<string, string> = ${JSON.stringify(templates, nul
 `;
 
   fs.writeFileSync(OUTPUT_FILE, fileContent, "utf-8");
+
+  const formatter = spawnSync("bunx", ["oxfmt", "--write", OUTPUT_FILE], {
+    stdio: "inherit",
+    shell: process.platform === "win32",
+  });
+
+  if (formatter.status !== 0) {
+    process.exit(formatter.status ?? 1);
+  }
+
   console.log(`Generated templates bundle at ${OUTPUT_FILE}`);
 }
 

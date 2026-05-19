@@ -11,6 +11,7 @@ const external = [
   "util",
   "os",
   "stream",
+  "url",
 ];
 
 export default defineConfig({

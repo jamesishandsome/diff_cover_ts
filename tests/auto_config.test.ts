@@ -241,4 +241,33 @@ describe("auto_config", () => {
     const reports = findCoverageReports();
     expect(reports).toEqual([lcovPath]);
   });
+
+  test("should detect tuple-style reporters", () => {
+    const configPath = path.join(cwd, "vitest.config.ts");
+    const lcovPath = path.join(cwd, "coverage", "lcov.info");
+    const coberturaPath = path.join(cwd, "coverage", "cobertura.xml");
+
+    mockExistsSync.mockImplementation((p: string) => {
+      if (p === configPath) return true;
+      if (p === lcovPath) return true;
+      if (p === coberturaPath) return true;
+      return false;
+    });
+
+    mockReadFileSync.mockImplementation((p: string) => {
+      if (p === configPath) {
+        return `
+          reporter: [
+            ['lcov', { projectRoot: './src' }],
+            ['cobertura', { file: 'cobertura.xml' }],
+            { custom: 'not-a-coverage-reporter' }
+          ]
+        `;
+      }
+      return "";
+    });
+
+    const reports = findCoverageReports();
+    expect(reports).toEqual([lcovPath, coberturaPath]);
+  });
 });
