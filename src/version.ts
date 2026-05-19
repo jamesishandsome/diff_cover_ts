@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
-const FALLBACK_VERSION = "2.0.5";
+const FALLBACK_VERSION = "2.0.6";
 
 export function packageVersion(): string {
   try {
