@@ -1,117 +1,65 @@
 # diff-cover-ts
 
-<div align="center">
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm version](https://img.shields.io/npm/v/diff-cover.svg)](https://www.npmjs.com/package/diff-cover)
-[![npm downloads](https://img.shields.io/npm/dm/diff-cover.svg)](https://www.npmjs.com/package/diff-cover)
-[![CI](https://github.com/jamesishandsome/diff_cover_ts/actions/workflows/ci.yml/badge.svg)](https://github.com/jamesishandsome/diff_cover_ts/actions/workflows/ci.yml)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
-[![Bun](https://img.shields.io/badge/Bun-1.0-orange.svg)](https://bun.sh/)
-[![Code Style](https://img.shields.io/badge/code%20style-oxlint-green)](https://github.com/oxc-project/oxc)
-
-**高性能 TypeScript 版 [diff_cover](https://github.com/Bachmann1234/diff_cover) 工具**
-
-_自动检测 git diff 中修改过的代码是否缺少测试覆盖率或存在质量问题。_
+`diff-cover` 的 TypeScript 实现，用于只检查 Git diff 中变更行的覆盖率和代码质量。
 
 [English](./README.md) | [简体中文](./README_zh.md)
 
-</div>
+## 作用
 
----
+`diff-cover` 适合在已有项目中做增量质量门禁：它不会因为历史代码覆盖率低而阻塞构建，而是比较当前分支和基准分支，只报告本次变更行上的覆盖率缺口或质量问题。
 
-## 📖 目录
+当前发布两个 CLI：
 
-- [简介](#-简介)
-- [核心特性](#-核心特性)
-- [安装](#-安装)
-- [使用方法](#-使用方法)
-  - [Diff Cover (增量覆盖率)](#diff-cover-增量覆盖率)
-  - [Diff Quality (增量质量检查)](#diff-quality-增量质量检查)
-- [开发指南](#-开发指南)
-- [许可证](#-许可证)
+- `diff-cover`：基于覆盖率报告检查变更行。
+- `diff-quality`：基于静态分析报告检查变更行。
 
-## 🚀 简介
-
-`diff_cover_ts` 帮助你通过关注**修改过的代码**来保持高质量的代码标准。它不会因为遗留代码的低覆盖率而导致构建失败，而是确保每一次新的提交都符合你的质量要求。
-
-它的工作原理是将当前分支与基础分支（例如 `origin/main`）进行比较，并仅报告修改行的覆盖率或质量缺陷。
-
-## ✨ 核心特性
-
-- **🎯 精准覆盖**: 仅报告 git diff 中修改过的代码行的覆盖率。
-- **🛡️ 质量门禁**: 仅对修改过的代码执行 lint 检查。
-- **🤖 自动配置**: 无缝检测 `vite.config.ts/js` 或 `vitest.config.ts/js` 以获取覆盖率报告路径。
-- **📊 多格式支持**: 兼容 `lcov`、`cobertura`、`clover`、`jacoco` 和通用 XML 报告。
-- **⚡ Git 集成**: 内置 git 历史分析功能，精准识别修改行。
-- **🚫 阈值检查**: 设置最低分数线，如果覆盖率或质量得分过低，则中断 CI/CD 流程。
-
-## 📦 安装
+## 安装
 
 ```bash
-# 使用 npm 全局安装 (推荐)
-npm install -g diff-cover
-
-# 使用 Bun 全局安装
-bun add -g diff-cover
-
-# 项目内安装
-npm install diff-cover --save-dev
+npm install --save-dev diff-cover
+# 或
+bun add -d diff-cover
 ```
 
-## 🛠 使用方法
+也可以全局安装：
 
-### Diff Cover (增量覆盖率)
+```bash
+npm install -g diff-cover
+```
 
-自动识别 diff 中缺少测试覆盖率的行。
+## 快速开始
 
-#### ⚡ 自动配置 (推荐)
-
-如果你使用的是 **Vite** 或 **Vitest**，只需运行：
+如果项目使用 Vite 或 Vitest，并且已经生成覆盖率报告：
 
 ```bash
 diff-cover
 ```
 
-工具会自动解析你的配置文件，定位覆盖率报告并确定格式。
-
-#### 📝 手动使用
-
-你可以显式指定覆盖率报告文件：
+手动指定覆盖率报告：
 
 ```bash
-diff-cover coverage/lcov.info
-# 或者
-diff-cover coverage/cobertura.xml
+diff-cover coverage/lcov.info --compare-branch origin/main --fail-under 90
+diff-cover coverage/cobertura.xml --format html:coverage.html,json:coverage.json
 ```
 
-#### ⚙️ 选项
-
-| 选项                        | 描述                                 | 默认值        |
-| :-------------------------- | :----------------------------------- | :------------ |
-| `--compare-branch <branch>` | 用于对比的分支                       | `origin/main` |
-| `--fail-under <score>`      | 如果覆盖率低于此值，则返回非零退出码 | `0`           |
-| `--show-uncovered`          | 在控制台打印未覆盖的行               | `false`       |
-| `--expand-coverage-report`  | 基于上一行的命中情况追加缺失行       | `false`       |
-| `--ignore-staged`           | 忽略 diff 中的已暂存更改             | `false`       |
-| `--ignore-unstaged`         | 忽略 diff 中的未暂存更改             | `false`       |
-| `--include-untracked`       | 在分析中包含未跟踪的文件             | `false`       |
-| `--exclude <patterns...>`   | 排除匹配 glob 模式的文件             | `[]`          |
-| `--include <patterns...>`   | 包含匹配 glob 模式的文件             | `[]`          |
-| `--html-report <file>`      | 在指定路径生成 HTML 报告             | `null`        |
-| `--json-report <file>`      | 在指定路径生成 JSON 报告             | `null`        |
-
----
-
-### Diff Quality (增量质量检查)
-
-运行静态分析工具，并仅报告修改行中的违规项。
+检查质量报告：
 
 ```bash
-diff-quality report.txt --violations <driver>
+diff-quality eslint-report.json --violations eslint --fail-under 95
+diff-quality pylint_report.txt --violations pylint --html-report quality.html
 ```
 
-#### 🔌 支持的驱动程序
+## 支持的报告
+
+覆盖率格式：
+
+- `lcov.info`
+- Cobertura XML
+- Clover XML
+- JaCoCo XML
+- 通用 XML 覆盖率报告
+
+质量检查驱动：
 
 - `eslint`
 - `pylint`
@@ -121,47 +69,85 @@ diff-quality report.txt --violations <driver>
 - `checkstyle`
 - `findbugs`
 
-#### ⚙️ 选项
+## 常用选项
 
-| 选项                        | 描述                                   | 默认值        |
-| :-------------------------- | :------------------------------------- | :------------ |
-| `--compare-branch <branch>` | 用于对比的分支                         | `origin/main` |
-| `--fail-under <score>`      | 如果质量得分低于此值，则返回非零退出码 | `0`           |
-| `--include-untracked`       | 包含未跟踪的文件                       | `false`       |
-| `--exclude <patterns...>`   | 排除匹配 glob 模式的文件               | `[]`          |
-| `--html-report <file>`      | 在指定路径生成 HTML 报告               | `null`        |
+| 选项                        | 说明                                     |
+| --------------------------- | ---------------------------------------- |
+| `--compare-branch <branch>` | 用于对比的基准分支，默认 `origin/main`。 |
+| `--fail-under <score>`      | diff 得分低于阈值时返回非零退出码。      |
+| `--ignore-staged`           | 不分析已暂存变更。                       |
+| `--ignore-unstaged`         | 不分析未暂存变更。                       |
+| `--include-untracked`       | 将未跟踪文件纳入分析。                   |
+| `--include <patterns...>`   | 只分析匹配 glob 的文件。                 |
+| `--exclude <patterns...>`   | 排除匹配 glob 的文件。                   |
+| `--diff-file <file>`        | 从保存的 diff 文件读取，而不是执行 Git。 |
+| `--total-percent-float`     | 总分保留两位小数。                       |
 
-## 💻 开发指南
+## 配置文件
 
-### 环境设置
+可以使用 TOML 配置工具参数：
+
+```toml
+[tool.diff_cover]
+compare_branch = "origin/main"
+fail_under = 90
+exclude = ["**/*.test.ts"]
+
+[tool.diff_quality]
+violations = "eslint"
+fail_under = 95
+```
+
+运行时指定配置文件：
 
 ```bash
-# 安装依赖
+diff-cover coverage/lcov.info --config-file pyproject.toml
+diff-quality eslint-report.json --config-file pyproject.toml
+```
+
+## 开发
+
+```bash
 bun install
-```
-
-### 测试
-
-```bash
-# 运行测试套件
 bun test
-
-# 运行带覆盖率的测试
-bun test --coverage
+bun run lint
+bun run format:check
+bun run build
 ```
 
-### 代码质量
-
-我们使用 `oxlint` 进行代码检查，使用 `oxfmt` 进行格式化。通过 `husky` 配置的 Pre-commit 钩子确保代码质量。
+构建发布用二进制文件：
 
 ```bash
-# 代码检查
-bun run lint
-
-# 代码格式化
-bun run format
+bun run build:binary
 ```
 
-## 📄 许可证
+本地可以限定二进制构建目标：
 
-本项目基于 MIT 许可证开源。
+```bash
+BINARY_TARGETS=bun-windows-x64 bun run build:binary
+# PowerShell: $env:BINARY_TARGETS="bun-windows-x64"; bun run build:binary
+```
+
+本地运行文档站：
+
+```bash
+bun run docs:dev
+```
+
+构建文档站：
+
+```bash
+bun run docs:build
+```
+
+## 维护者发布说明
+
+- `bun run build` 会重新生成模板并打包 npm 文件。
+- `bun run build:binary` 会在 `dist/` 下生成多平台二进制文件。
+- `prepublishOnly` 会在 `npm publish` 前执行包构建。
+- CI 会执行测试、lint、格式检查、包构建、文档构建和二进制构建。
+- `Deploy Docs` workflow 会在推送到 `main` 或 `master` 时，将 VitePress 构建结果发布到 `docs` 分支。
+
+## 许可证
+
+MIT

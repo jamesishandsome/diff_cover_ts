@@ -21,8 +21,9 @@ import {
   BaseReportGenerator,
 } from "./report_generator";
 import { getConfig, Tool } from "./config_parser";
+import { packageVersion } from "./version";
 
-const VERSION = "0.1.0";
+const VERSION = packageVersion();
 
 const DRIVERS: { [key: string]: new () => QualityDriver } = {
   eslint: EslintDriver,
@@ -168,7 +169,7 @@ async function main() {
     reporter = new HtmlQualityReportGenerator(
       qualityReporter,
       diffReporter,
-      null,
+      config.externalCssFile,
       config.totalPercentFloat,
     );
     const output = fs.createWriteStream(config.htmlReport);

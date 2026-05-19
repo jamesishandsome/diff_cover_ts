@@ -1,6 +1,122 @@
 import * as fs from "fs";
 import * as path from "path";
 
+function extractPropertyValue(content: string, propertyName: string): string | null {
+  const match = new RegExp(`${propertyName}\\s*:`).exec(content);
+  if (!match) return null;
+
+  let index = match.index + match[0].length;
+  while (/\s/.test(content[index] || "")) index++;
+
+  const first = content[index];
+  if (first === "'" || first === '"') {
+    const quote = first;
+    let end = index + 1;
+    while (end < content.length) {
+      if (content[end] === "\\" && end + 1 < content.length) {
+        end += 2;
+        continue;
+      }
+      if (content[end] === quote) {
+        return content.slice(index, end + 1);
+      }
+      end++;
+    }
+    return null;
+  }
+
+  if (first !== "[") return null;
+
+  let depth = 0;
+  let quote: string | null = null;
+  for (let end = index; end < content.length; end++) {
+    const char = content[end];
+    if (quote) {
+      if (char === "\\" && end + 1 < content.length) {
+        end++;
+      } else if (char === quote) {
+        quote = null;
+      }
+      continue;
+    }
+
+    if (char === "'" || char === '"') {
+      quote = char;
+      continue;
+    }
+    if (char === "[") depth++;
+    if (char === "]") depth--;
+    if (depth === 0) {
+      return content.slice(index, end + 1);
+    }
+  }
+
+  return null;
+}
+
+function unquote(value: string): string | null {
+  const trimmed = value.trim();
+  const quote = trimmed[0];
+  if ((quote !== "'" && quote !== '"') || trimmed[trimmed.length - 1] !== quote) {
+    return null;
+  }
+  return trimmed.slice(1, -1);
+}
+
+function splitTopLevelArrayItems(value: string): string[] {
+  const inner = value.trim().slice(1, -1);
+  const items: string[] = [];
+  let start = 0;
+  let depth = 0;
+  let quote: string | null = null;
+
+  for (let index = 0; index < inner.length; index++) {
+    const char = inner[index];
+    if (quote) {
+      if (char === "\\" && index + 1 < inner.length) {
+        index++;
+      } else if (char === quote) {
+        quote = null;
+      }
+      continue;
+    }
+
+    if (char === "'" || char === '"') {
+      quote = char;
+      continue;
+    }
+    if (char === "[" || char === "{") depth++;
+    if (char === "]" || char === "}") depth--;
+    if (char === "," && depth === 0) {
+      items.push(inner.slice(start, index).trim());
+      start = index + 1;
+    }
+  }
+
+  const lastItem = inner.slice(start).trim();
+  if (lastItem) items.push(lastItem);
+  return items;
+}
+
+function parseReporters(value: string): string[] {
+  const trimmed = value.trim();
+  const singleReporter = unquote(trimmed);
+  if (singleReporter) return [singleReporter];
+  if (!trimmed.startsWith("[")) return [];
+
+  return splitTopLevelArrayItems(trimmed)
+    .map((item) => {
+      const direct = unquote(item);
+      if (direct) return direct;
+      if (item.startsWith("[")) {
+        const firstTupleItem = splitTopLevelArrayItems(item)[0];
+        return firstTupleItem ? unquote(firstTupleItem) : null;
+      }
+      return null;
+    })
+    .filter((item): item is string => Boolean(item));
+}
+
 export function findCoverageReports(): string[] {
   const cwd = process.cwd();
   const configFiles = ["vitest.config.ts", "vitest.config.js", "vite.config.ts", "vite.config.js"];
@@ -14,27 +130,17 @@ export function findCoverageReports(): string[] {
       try {
         const content = fs.readFileSync(configPath, "utf-8");
 
-        // Extract reporters
-        // Match: reporter: ['lcov', 'json'] or reporter: "lcov"
-        const reporterMatch = content.match(/reporter:\s*(\[[^\]]*\]|['"][^'"]*['"])/);
-        if (reporterMatch && reporterMatch[1]) {
-          const reporterValue = reporterMatch[1];
-          if (reporterValue.startsWith("[")) {
-            // Parse array manually to avoid eval/json parse issues with single quotes
-            const items = reporterValue
-              .slice(1, -1) // remove []
-              .split(",")
-              .map((s) => s.trim().replace(/^['"]|['"]$/g, ""));
-            reporters = items.filter((s) => s.length > 0);
-          } else {
-            reporters = [reporterValue.replace(/^['"]|['"]$/g, "")];
-          }
+        const reporterValue = extractPropertyValue(content, "reporter");
+        if (reporterValue) {
+          reporters = parseReporters(reporterValue);
         }
 
-        // Extract reportsDirectory
-        const dirMatch = content.match(/reportsDirectory:\s*['"]([^'"]*)['"]/);
-        if (dirMatch && dirMatch[1]) {
-          reportsDirectory = dirMatch[1];
+        const reportsDirectoryValue = extractPropertyValue(content, "reportsDirectory");
+        const parsedReportsDirectory = reportsDirectoryValue
+          ? unquote(reportsDirectoryValue)
+          : null;
+        if (parsedReportsDirectory) {
+          reportsDirectory = parsedReportsDirectory;
         }
 
         if (reporters.length > 0) {

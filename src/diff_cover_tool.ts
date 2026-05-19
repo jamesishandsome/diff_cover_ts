@@ -11,8 +11,9 @@ import {
 } from "./report_generator";
 import { getConfig, Tool } from "./config_parser";
 import { findCoverageReports } from "./auto_config";
+import { packageVersion } from "./version";
 
-const VERSION = "0.1.0";
+const VERSION = packageVersion();
 
 function formatType(value: string, previous: Record<string, string>): Record<string, string> {
   const format = previous || {};

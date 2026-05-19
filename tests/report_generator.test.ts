@@ -1,5 +1,5 @@
 import { expect, test, describe } from "bun:test";
-import { StringReportGenerator } from "../src/report_generator";
+import { HtmlQualityReportGenerator, StringReportGenerator } from "../src/report_generator";
 import { BaseViolationReporter, Violation } from "../src/violations_reporter";
 import { BaseDiffReporter } from "../src/diff_reporter";
 
@@ -49,8 +49,6 @@ describe("ReportGenerator", () => {
 
     generator.generateReport(stream);
 
-    console.log(output);
-
     expect(output).toContain("Diff Coverage");
     expect(output).toContain("file1.ts");
     // Measured in diff: 10, 20 (30 is not measured)
@@ -58,5 +56,20 @@ describe("ReportGenerator", () => {
     // Coverage: 0%
     expect(output).toContain("0%");
     expect(output).toContain("Missing lines 10,20");
+  });
+
+  test("HtmlQualityReportGenerator links external CSS", () => {
+    const violations = new MockViolationReporter();
+    const diff = new MockDiffReporter();
+    const generator = new HtmlQualityReportGenerator(violations, diff, "diff-cover.css");
+
+    let output = "";
+    const stream = {
+      write: (chunk: string) => (output += chunk),
+    } as any;
+
+    generator.generateReport(stream);
+
+    expect(output).toContain('<link rel="stylesheet" href="diff-cover.css" />');
   });
 });
