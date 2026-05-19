@@ -105,6 +105,31 @@ diff-cover coverage/lcov.info --config-file pyproject.toml
 diff-quality eslint-report.json --config-file pyproject.toml
 ```
 
+## Roadmap
+
+Planned updates focus on making the tool easier to adopt in CI, more accurate in large repositories, and more useful as a reusable TypeScript package.
+
+Near-term priorities:
+
+- Improve CI integration with automatic base branch detection for GitHub Actions, GitLab CI, Azure DevOps, and other common environments.
+- Add PR-friendly outputs such as GitHub annotations, SARIF reports, and compact Markdown summaries for review comments.
+- Improve diagnostics for common setup problems, including missing coverage files, shallow CI checkouts, empty diffs, and unsupported report formats.
+- Expand documentation with practical recipes for Vitest, Jest/Istanbul, Python coverage.py, ESLint, and common CI workflows.
+
+Mid-term priorities:
+
+- Add more quality report drivers, including Biome, Ruff, mypy, TypeScript compiler output, stylelint, and golangci-lint.
+- Improve monorepo and path mapping support for projects where source paths differ between Git diffs and coverage reports.
+- Enhance HTML reports with filtering, sorting, search, collapsible passing files, and clearer per-file summaries.
+- Add configuration conveniences such as `.diff-cover.toml`, `package.json` config, generated config templates, and JSON schema support.
+
+Longer-term ideas:
+
+- Expose a stable library API so other tools can parse reports, compute diff coverage, and generate reports without shelling out to the CLI.
+- Add baseline support to block only newly introduced coverage gaps or quality violations.
+- Improve performance for large reports with caching, streaming XML parsing, and optional timing diagnostics.
+- Explore local development workflows such as watch mode and editor-friendly output.
+
 ## Development
 
 ```bash
